@@ -4,12 +4,17 @@ import "./Name.css";
 
 class Name extends Component {
   constructor(props) {
+    const reduxState = store.getState();
+
     super(props);
     this.state = {
-      name: '',
-      category: ''
+      name: reduxState.name,
+      category: reduxState.category
     };
   }
+
+
+  
   handleNameChange(nameVal) {
     this.setState({
       name: nameVal
@@ -22,8 +27,16 @@ class Name extends Component {
     });
   }
   saveChanges() {
-    // Send data to Redux state
+    store.dispatch({
+      type: UPDATE_AUTHOR_FIRST,
+      payload: this.state.authorFirst
+    });
+    store.dispatch({
+      type: UPDATE_AUTHOR_LAST,
+      payload: this.state.authorLast
+    });
   }
+
   render() {
     return (
       <div className="Name forms">
@@ -61,3 +74,5 @@ class Name extends Component {
 }
 
 export default Name;
+
+

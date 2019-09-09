@@ -1,11 +1,15 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
+import store, {ADD_INGREDIENT} from '../../store'
+import store, {ADD_INSTRUCTION} from '../../store'
+
 class Ingredients extends Component {
   constructor(props) {
     super(props);
+    const reduxState = store.getState()
     this.state = {
-      ingredients: [],
+      ingredients: reduxState.ingredients,
       input: ""
     };
   }
@@ -14,12 +18,35 @@ class Ingredients extends Component {
       input: val
     });
   }
+  addInstruction() {
+    store.dispatch({
+      type: ADD_INSTRUCTION,
+      payload: this.state.input
+    });
+    this.setState({
+      input: ""
+    });
+  }
   addIngredient() {
+    store.dispatch({
+      type: ADD_INGREDIENT,
+      payload: this.state.input
+    })
     // Send data to Redux state
     this.setState({
       input: ""
     });
   }
+
+  componentDidMount(){
+    store.subscribe(()=>{
+      const reduxState = store.getState;
+      this.setState({
+        ingredients: reduxState.ingredients
+      })
+    })
+  }
+
   render() {
     const ingredients = this.state.ingredients.map((ingredient, i) => {
       return <li key={i}>{ingredient}</li>;
